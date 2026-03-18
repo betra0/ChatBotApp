@@ -1,0 +1,1 @@
+Segundo proyecto en Java: chatbot que utiliza APIs de Gemini y otras IA, con implementación de memoria de corto y largo plazo. Este proyecto sirve para testear y familiarizarme con Java antes de desarrollar un proyecto más serio.
