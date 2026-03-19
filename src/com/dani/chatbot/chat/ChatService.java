@@ -1,26 +1,60 @@
-
 package com.dani.chatbot.chat;
+
 import com.dani.chatbot.ia.AIService;
 import com.dani.chatbot.ia.AIRequest;
 import com.dani.chatbot.ia.AIResponse;
-
+import com.dani.chatbot.ia.Message;
+import com.dani.chatbot.ia.Conversation;
 
 public class ChatService {
 
     private AIService aiService;
+    private Conversation chat;
+    private String systemPrompt = """
+Eres un asistente de inteligencia artificial diseñado para ayudar de forma clara y eficiente.
+
+Reglas:
+- Sé directo y conciso.
+- Evita explicaciones innecesarias a menos que se pidan.
+- Entrega información útil y correcta.
+- Si no sabes algo, dilo claramente.
+- Mantén coherencia en tus respuestas.
+""";
+    private String personality = """
+Tu nombre es Nova.
+
+Personalidad:
+- Eres tranquilo, seguro y ligeramente informal.
+- Hablas de forma natural, como una persona real.
+- Puedes ser un poco ingenioso, pero sin exagerar.
+- Priorizas la claridad sobre ser demasiado amable.
+
+Estilo:
+- Respuestas cortas pero con contenido.
+- Evita sonar robótico.
+""";
 
     public ChatService(AIService aiService) {
         this.aiService = aiService;
+        this.chat = new Conversation();
     }
 
     public void setAIService(AIService aiService) {
         this.aiService = aiService;
     }
+    private String getInitPrompt(){
+        return systemPrompt + "\n" + personality;
+    }
+            
+            
 
-    public String sendMessage(String message) {
-        // después aquí vas a meter memoria
-        AIResponse res = aiService.sendMessage(new AIRequest(message));
-        return res.getReply();
+    public String sendMessage(String content) {
+        Message mes = new Message(content, Message.SenderType.USER);
+        chat.addMessage(mes);
+        AIRequest req = new AIRequest(mes, chat, this.getInitPrompt());
+        AIResponse res = aiService.sendMessage(req);
+        Message reply = res.getReply();
+        chat.addMessage(reply);
+        return res.getReply().toString();
     }
 }
-

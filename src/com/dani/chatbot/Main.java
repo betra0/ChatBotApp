@@ -1,12 +1,11 @@
 
 package com.dani.chatbot;
-import com.dani.chatbot.ia.impl.GeminiService;
 import com.dani.chatbot.ia.AIProvider;
 import com.dani.chatbot.ia.AIService;
 import com.dani.chatbot.ia.AIServiceFactory;
 import com.dani.chatbot.chat.ChatService;
 
-
+import java.util.List;
 
 
 import java.util.Scanner;
@@ -24,16 +23,19 @@ public class Main {
         // TODO code application logic here
         Scanner sc =new Scanner(System.in);
         
-        int intents =5;
+        int intents =0;
         System.out.println("Iniciando Chat con IA");
+        
         AIService ai = AIServiceFactory.create(AIProvider.GEMINI);
         ChatService chat = new ChatService(ai);
+        List<String> comandosSalida = List.of("exit", "salir", "quit","q");
                 
                 
-        while(intents >= 1){
+        while(true){
             System.out.println("pregunta a la IA: ");
             String entrada= sc.nextLine();
-            if(entrada.equals("q")){
+            
+            if(comandosSalida.contains(entrada.toLowerCase())){
                 System.out.println("bye bye");
                 break;
             }
@@ -45,7 +47,7 @@ public class Main {
           
                   
           
-            intents --;
+            intents ++;
         }
         
     }
