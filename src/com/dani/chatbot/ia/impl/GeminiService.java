@@ -21,9 +21,15 @@ import com.dani.chatbot.ia.AIService;
  */
 public class GeminiService implements AIService {
         
-    static String apiKey = "clave a usar aqui";
+    private final String apiKey;
+
+    public GeminiService(String apiKey) {
+        this.apiKey = apiKey;
+    }
     
-    static String sendPrompt (String prompt){
+    
+    
+    private String sendPrompt (String prompt){
         HttpClient client = HttpClient.newHttpClient();
         
         String jsonRequest = """
@@ -38,7 +44,7 @@ public class GeminiService implements AIService {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent"))
                     .header("Content-Type", "application/json")
-                    .header("x-goog-api-key", apiKey)
+                    .header("x-goog-api-key", this.apiKey)
                     .POST(HttpRequest.BodyPublishers.ofString(jsonRequest))
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
